@@ -1,13 +1,10 @@
 import { connectToDatabase } from "../../../lib/mongodb"
 const generateToken = require('../../../utils/generateToken')
-
 const bcrypt = require('bcryptjs/dist/bcrypt');
 
 export default async function handler(req, res) {
     const { database } = await connectToDatabase();
     const collection = database.collection("users");
-
-    console.log(req.body)
 
     const user = req.body
 
@@ -19,7 +16,7 @@ export default async function handler(req, res) {
     const username = user.username
     const matchingUser = await collection.findOne({ username })
 
-    if ( matchingUser && (await bcrypt.compare(user.password, matchingUser.password))) {
+    if (matchingUser && (await bcrypt.compare(user.password, matchingUser.password))) {
         const jwtPayload = {
             username: matchingUser.username,
             isAdmin: matchingUser.isAdmin

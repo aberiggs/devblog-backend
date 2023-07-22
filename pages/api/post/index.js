@@ -22,7 +22,6 @@ export default async function handler(req, res) {
         })
     }
 
-    console.log("Verifying token...")
     const jwtData = verifyToken(body.token)
 
     if(!jwtData) {
