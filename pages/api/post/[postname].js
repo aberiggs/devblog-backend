@@ -1,12 +1,13 @@
 import { connectToDatabase } from "../../../lib/mongodb"   
 const { BlobServiceClient } = require("@azure/storage-blob");
 const verifyToken = require('../../../utils/verifyToken')
+const allowCors = require('../../../utils/allowCors')
 
 if (!process.env.AZURE_CONNECTION_STRING) {
     throw new Error('Please add your Azure Storage connection string to .env.local')
 }
 
-export default async function handler(req, res) {
+async function handler(req, res) {
     const { database } = await connectToDatabase();
     const collection = database.collection("posts");
 
@@ -43,8 +44,6 @@ export default async function handler(req, res) {
         await streamToBuffer(downloadBlockBlobResponse.readableStreamBody)
     ).toString();
 
-    console.log(`Downloaded blob content: "${markdown}"`);
-
     // [Node.js only] A helper method used to read a Node.js readable stream into a Buffer
     async function streamToBuffer(readableStream) {
         return new Promise((resolve, reject) => {
@@ -65,3 +64,5 @@ export default async function handler(req, res) {
         postSummary: post.postSummary
     })
 }
+
+module.exports = allowCors(handler)

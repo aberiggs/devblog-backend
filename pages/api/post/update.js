@@ -2,8 +2,9 @@ import { date } from "azure";
 import { connectToDatabase } from "../../../lib/mongodb"   
 const { BlobServiceClient } = require("@azure/storage-blob");
 const verifyToken = require('../../../utils/verifyToken')
+const allowCors = require('../../../utils/allowCors')
 
-export default async function handler(req, res) {
+async function handler(req, res) {
     // MongoDB
     const { database } = await connectToDatabase();
     const collection = database.collection("posts");
@@ -88,3 +89,5 @@ export default async function handler(req, res) {
         message: 'Post updated',
     })
 }
+
+module.exports = allowCors(handler)

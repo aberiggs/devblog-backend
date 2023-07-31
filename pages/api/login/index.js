@@ -1,8 +1,10 @@
 import { connectToDatabase } from "../../../lib/mongodb"
 const generateToken = require('../../../utils/generateToken')
+const allowCors = require('../../../utils/allowCors')
 const bcrypt = require('bcryptjs/dist/bcrypt');
 
-export default async function handler(req, res) {
+
+async function handler(req, res) {
     const { database } = await connectToDatabase();
     const collection = database.collection("users");
 
@@ -35,5 +37,6 @@ export default async function handler(req, res) {
         })
     }
         
-    
   }
+
+  module.exports = allowCors(handler)

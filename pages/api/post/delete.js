@@ -1,12 +1,13 @@
 import { connectToDatabase } from "../../../lib/mongodb"
 const { BlobServiceClient } = require("@azure/storage-blob");
 const verifyToken = require('../../../utils/verifyToken')
+const allowCors = require('../../../utils/allowCors')
 
 if (!process.env.AZURE_CONNECTION_STRING) {
     throw new Error('Please add your Azure Storage connection string to .env.local')
 }
 
-export default async function handler(req, res) {
+async function handler(req, res) {
     console.log("Delete post...")
     const { database } = await connectToDatabase();
     const collection = database.collection("posts");
@@ -69,3 +70,4 @@ export default async function handler(req, res) {
     
 }
 
+module.exports = allowCors(handler)

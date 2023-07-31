@@ -1,9 +1,11 @@
 import { connectToDatabase } from "../../../lib/mongodb"
 const verifyToken = require('../../../utils/verifyToken')
-
 const bcrypt = require('bcryptjs/dist/bcrypt');
+const allowCors = require('../../../utils/allowCors')
 
 export default async function handler(req, res) {
+    console.log("reauth")
+
     const { database } = await connectToDatabase();
 
     const jwt = req.body.token
@@ -28,3 +30,5 @@ export default async function handler(req, res) {
     })
     
   }
+
+  module.exports = allowCors(handler)
